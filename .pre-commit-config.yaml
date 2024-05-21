@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0  # Adjust the version as needed
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2  # Adjust the version as needed
+    hooks:
+      - id: black
+        language_version: python3.11.4  # Adjust based on your project's Python version
+        exclude: '.*migrations\/|.*\.js$|.*static\/|.*venv\/|.*env\/'  # Exclude migrations directory and venv/env
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2  # Adjust the version as needed
+    hooks:
+      - id: isort
+        name: isort (python)
+        exclude: '.*migrations\/|.*\.js$|.*static\/|.*venv\/|.*env\/'  # Exclude migrations directory and venv/env
+
+  - repo: local
+    hooks:
+        - id: pylint
+          name: pylint
+          entry: pylint
+          language: system
+          types: [python]
+          exclude: '.*venv\/|.*env\/'  # Exclude venv/env directory from linting
+          args:
+            - "-rn"
+            - "-sn"
+            - "--load-plugins=pylint_django"
+            - "--django-settings-module=project.settings"
+            - "--disable=missing-class-docstring"
+            - "--disable=missing-function-docstring"
+            - "--disable=missing-module-docstring"
+            - "--disable=useless-parent-delegation"
+            - "--disable=no-member"
+            - "--disable=too-many-ancestors"  # Disable the "too many ancestors" warning
+            - "--disable=E1101"
